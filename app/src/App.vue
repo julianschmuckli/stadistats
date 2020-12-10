@@ -3,7 +3,7 @@
     <v-container>
       <router-view />
     </v-container>
-    <v-bottom-navigation style="bottom:0;position:fixed;padding-top:10px;" :value="value" color="primary">
+    <v-bottom-navigation style="bottom:0;position:fixed;padding-top:10px;z-index:1000;" :value="value" color="primary">
       <v-btn @click="openHome">
         <span>Home</span>
         <v-icon>mdi-home</v-icon>
