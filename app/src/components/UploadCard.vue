@@ -15,9 +15,12 @@
 </template>
 
 <script>
+import userState from "../store/user";
+
 require("zip-js/WebContent/inflate");
 require("zip-js/WebContent/deflate");
 var zip = require("zip-js/WebContent/zip.js").zip;
+zip.useWebWorkers = true;
 
 export default {
   name: "UploadCard",
@@ -29,28 +32,28 @@ export default {
           type: this.file.type,
         });
 
-        zip.useWebWorkers = true;
-
         zip.createReader(
           new zip.BlobReader(blob),
           function (reader) {
-            // get all entries from the zip
             reader.getEntries(function (entries) {
               if (entries.length) {
-                // get first entry content as text
                 entries.forEach(function (entry) {
-                  console.log(entry.filename);
-                  entry.getData(
-                    new zip.TextWriter(),
-                    function (/*text*/) {
-                      // text contains the entry data as a String
-                      //console.log(text);
-                    },
-                    function (/*current, total*/) {
-                      // onprogress callback
-                      //console.log(current, total);
-                    }
-                  );
+                  var fileType = entry.filename.split(".")[
+                    entry.filename.split(".").length - 1
+                  ];
+                  var fileName = entry.filename.split("/")[entry.filename.split("/").length - 1].replace("." + fileType, "").toLowerCase();
+                  if (fileType === "json") {
+                    entry.getData(
+                      new zip.TextWriter(),
+                      function (content) {
+                        switch(fileName) {
+                            case "user_profile":
+                                userState.user_profile = JSON.parse(content).userProfile;
+                                break;
+                        }
+                      }
+                    );
+                  }
                 });
               }
             });
