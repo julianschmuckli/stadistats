@@ -1,20 +1,20 @@
 <template>
   <div class="home">
     <h1>Your Stadia Stats</h1>
+    <div v-if="!imported">
+      <UploadCard></UploadCard>
+    </div>
     <v-layout row wrap style="margin:0;margin-bottom:100px;">
-      <v-flex sm6 xs12 md4 lg3 v-if="!imported">
-        <UploadCard></UploadCard>
-      </v-flex>
       <v-flex sm12 xs12 md12 lg12 v-if="imported">
         <UserProfile></UserProfile>
       </v-flex>
       <v-flex sm6 xs12 md6 lg6 v-if="imported">
-        <Games @expandedGame="openGameDetails"></Games>
-      </v-flex>
-      <v-flex sm6 xs12 md6 lg6 v-if="imported && selected_game_name !== undefined">
-        <GameDetails :name.sync="selected_game_name"></GameDetails>
+        <Games @expandedGame="prepareGameDetails" @openGameDetails="d_game_details = true"></Games>
       </v-flex>
     </v-layout>
+    <v-dialog v-model="d_game_details">
+      <GameDetails :name.sync="selected_game_name"></GameDetails>
+    </v-dialog>
   </div>
 </template>
 
@@ -29,6 +29,7 @@ export default {
   name: 'Home',
   data() {
     return {
+      d_game_details: false,
       selected_game_name: undefined
     }
   },
@@ -38,7 +39,7 @@ export default {
     }
   },
   methods: {
-    openGameDetails(game) {
+    prepareGameDetails(game) {
       if (game === undefined) {
         this.selected_game_name = undefined;
       } else {
