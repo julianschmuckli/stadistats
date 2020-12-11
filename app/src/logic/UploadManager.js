@@ -4,25 +4,42 @@ import userState from "../store/user";
 var zip = require("zip-js/WebContent/zip.js").zip;
 zip.useWebWorkers = true;
 
+var imageData = {};
+
 var UploadManager = {
     processEntry(entry) {
         var fileType = entry.filename.split(".")[
             entry.filename.split(".").length - 1
         ];
         var fileNameParts = entry.filename.split("/");
-        var fileName = (fileNameParts[fileNameParts.length - 2] + "/" + fileNameParts[fileNameParts.length - 1].replace("." + fileType, "")).toLowerCase();
-        if (fileType === "json") {
-            entry.getData(new zip.TextWriter(), function (content) {
-                UploadManager.saveJSON(fileName, content);
-            }.bind(this));
+        var fileName = (
+            fileNameParts[fileNameParts.length - 2] +
+            "/" +
+            fileNameParts[fileNameParts.length - 1].replace("." + fileType, "")
+        ).toLowerCase();
+        switch (fileType) {
+            case "json":
+                entry.getData(
+                    new zip.TextWriter(),
+                    function(content) {
+                        UploadManager.saveJSON(fileName, content);
+                    }.bind(this)
+                );
+                break;
+            case "jpeg":
+                entry.getData(
+                    new zip.BlobWriter(),
+                    async function(content) {
+                        await UploadManager.saveJPEG(fileName, content);
+                    }.bind(this)
+                );
+                break;
         }
     },
     saveJSON(fileName, content) {
         switch (fileName) {
             case "user/user_profile":
-                userState.user_profile = JSON.parse(
-                    content
-                ).userProfile;
+                userState.user_profile = JSON.parse(content).userProfile;
                 break;
             case "social/social_graph":
                 userState.social_graph = JSON.parse(content);
@@ -32,8 +49,9 @@ var UploadManager = {
                 var library = JSON.parse(content).library;
                 library.entitlements.sort(UploadManager.sortGames);
 
-                var temp_library = [], unique_names = ["Stadia Pro"];
-                library.entitlements.forEach(function (game) {
+                var temp_library = [],
+                    unique_names = ["Stadia Pro"];
+                library.entitlements.forEach(function(game) {
                     if (!unique_names.includes(game["skuName"])) {
                         temp_library.push(game);
                         unique_names.push(game["skuName"]);
@@ -42,35 +60,71 @@ var UploadManager = {
                 gameState.library.entitlements = temp_library;
                 break;
             case "game_data/gamer_history":
-                var applications = JSON.parse(content).gamerHistory.applications;
+                var applications = JSON.parse(content).gamerHistory
+                    .applications;
                 var history = {};
 
-                applications.forEach(function (application) {
+                applications.forEach(function(application) {
                     history[application.applicationName] = {
-                        averageTimePlayedPerSession: parseInt(application.averageTimePlayedPerSession.replace("s","")),
-                        mostRecentPlayTime: new Date(application.mostRecentPlayTime),
-                        totalTimePlayed: parseInt(application.totalTimePlayed.replace("s","")),
+                        averageTimePlayedPerSession: parseInt(
+                            application.averageTimePlayedPerSession.replace(
+                                "s",
+                                ""
+                            )
+                        ),
+                        mostRecentPlayTime: new Date(
+                            application.mostRecentPlayTime
+                        ),
+                        totalTimePlayed: parseInt(
+                            application.totalTimePlayed.replace("s", "")
+                        ),
                     };
                 });
                 gameState.game_history = history;
                 break;
         }
     },
-    unzip: function (blob) {
+    saveJPEG(fileName, content) {
+        return new Promise(function(resolve) {
+            var fileStructure = fileName.split("/");
+            if (fileStructure[0] === "user_captures") {
+                var imageName = fileStructure[1].split("_capture")[0];
+                if (!imageData[imageName]) {
+                    imageData[imageName] = [];
+                }
+
+                var reader = new FileReader();
+                reader.readAsDataURL(content);
+                reader.onloadend = function() {
+                    imageData[imageName].push(reader.result);
+                    resolve(true);
+                };
+            }
+        });
+    },
+    finalizeImages() {
+        gameState.captures = imageData;
+    },
+    unzip: function(blob) {
         zip.createReader(
             new zip.BlobReader(blob),
-            function (reader) {
-                reader.getEntries(function (entries) {
-                    if (entries.length) {
-                        entries.forEach(function (entry) {
-                            UploadManager.processEntry(entry)
-                        }.bind(this));
-                        console.log(gameState);
-                        console.log(userState);
-                    }
-                }.bind(this));
+            function(reader) {
+                reader.getEntries(
+                    function(entries) {
+                        if (entries.length) {
+                            entries.forEach(
+                                function(entry) {
+                                    UploadManager.processEntry(entry);
+                                    UploadManager.finalizeImages();
+                                }.bind(this)
+                            );
+                            console.log(gameState);
+                            console.log(userState);
+                        }
+                    }.bind(this)
+                );
             }.bind(this),
-            function (error) {
+            function(error) {
                 // onerror callback
                 console.log(error);
             }.bind(this)
@@ -84,7 +138,7 @@ var UploadManager = {
             return 1;
         }
         return 0;
-    }
+    },
 };
 
 export default UploadManager;
