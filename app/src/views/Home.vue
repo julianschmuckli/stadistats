@@ -12,7 +12,7 @@
         <Games @expandedGame="prepareGameDetails" @openGameDetails="d_game_details = true"></Games>
       </v-flex>
     </v-layout>
-    <v-dialog v-model="d_game_details">
+    <v-dialog v-model="d_game_details" max-width="800">
       <GameDetails :name.sync="selected_game_name"></GameDetails>
     </v-dialog>
   </div>
