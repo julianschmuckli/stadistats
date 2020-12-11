@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>Your games ({{ countGames }})</v-card-title>
     <v-card-text>
-      <v-expansion-panels v-model="expandedGame">
+      <v-expansion-panels flat hover v-model="expandedGame">
         <v-expansion-panel
           v-for="(game, index) in gameState.library.entitlements"
           :key="game.skuName"

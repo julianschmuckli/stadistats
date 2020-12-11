@@ -9,6 +9,9 @@
         <UserProfile></UserProfile>
       </v-flex>
       <v-flex sm6 xs12 md6 lg6 v-if="imported">
+        <Overview></Overview>
+      </v-flex>
+      <v-flex sm6 xs12 md6 lg6 v-if="imported">
         <Games @expandedGame="prepareGameDetails" @openGameDetails="d_game_details = true"></Games>
       </v-flex>
     </v-layout>
@@ -22,6 +25,7 @@
 import UploadCard from "../components/UploadCard";
 import UserProfile from "../components/UserProfile";
 import Games from "../components/Games";
+import Overview from "../components/Overview";
 import GameDetails from "../components/GameDetails";
 import userState from "../store/user";
 
@@ -51,7 +55,8 @@ export default {
     UploadCard,
     UserProfile,
     Games,
-    GameDetails
+    GameDetails,
+    Overview
   }
 }
 </script>

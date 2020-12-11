@@ -1,6 +1,6 @@
 <template>
   <div class="ftime" @click="changeTimeDisplay">
-      <v-icon>mdi-clock</v-icon>
+      <v-icon style="font-size:15px;">mdi-clock</v-icon>
       <span style="margin-left:5px;">{{ currentTime }}</span>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
             }
             switch(this.timeDisplay) {
                 case "hours":
-                    return Math.floor(this.seconds / 60 / 60)  + " hours";
+                    return Math.floor((this.seconds / 60 / 60) * 10) / 10  + " hours";
                 case "minutes":
                     return Math.floor(this.seconds / 60) + " minutes";
                 case "seconds":
