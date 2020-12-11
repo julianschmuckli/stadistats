@@ -38,6 +38,13 @@ export default {
             }
         }
     },
+    watch: {
+        seconds() {
+            if (this.seconds < 3600) { // Do not show 0 hours at start.
+                this.timeDisplay = "minutes";
+            }
+        }
+    },
     methods: {
         changeTimeDisplay() {
             switch(this.timeDisplay) {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-html="game.skuDescription"></div>
-    <v-btn @click="openStats" style="float:right;" text>Open stats</v-btn>
+    <v-btn color="primary" @click="openStats" style="float:right;" text>Open stats</v-btn>
   </div>
 </template>
 

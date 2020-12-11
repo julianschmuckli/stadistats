@@ -1,7 +1,7 @@
 <template>
   <v-card>
       <v-card-title>{{ name }}</v-card-title>
-      <v-card-text><p><f-time :seconds="currentState.totalTimePlayed"></f-time></p></v-card-text>
+      <v-card-text><p><f-time :seconds="currentState.totalTimePlayed"></f-time><f-time :seconds="currentState.averageTimePlayedPerSession"></f-time></p></v-card-text>
   </v-card>
 </template>
 
