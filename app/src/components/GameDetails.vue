@@ -2,7 +2,6 @@
   <v-card>
     <v-card-title>{{ name }}</v-card-title>
     <v-card-text>
-      <f-gallery :name="name"></f-gallery>
       <v-layout row wrap>
         <v-flex sm6 xs12 md4>
           <b>Total: </b
@@ -20,6 +19,8 @@
           ></f-date>
         </v-flex>
       </v-layout>
+      <h3>Captures</h3>
+      <f-gallery :images="images"></f-gallery>
     </v-card-text>
   </v-card>
 </template>
@@ -42,14 +43,23 @@ export default {
     return {
       gameState: gameState,
       currentState: {},
+      images: [],
     };
   },
   methods: {
     setContext() {
-      if (this.gameState.game_history[this.name]) {
-        this.currentState = this.gameState.game_history[this.name];
-      } else {
-        this.currentState = {};
+      if (this.name !== undefined) {
+        if (this.gameState.game_history[this.name]) {
+          this.currentState = this.gameState.game_history[this.name];
+        } else {
+          this.currentState = {};
+        }
+
+        if (this.gameState.captures[this.name.toLowerCase()]) {
+          this.images = this.gameState.captures[this.name.toLowerCase()];
+        } else {
+          this.images = [];
+        }
       }
     },
   },

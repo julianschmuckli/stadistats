@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Your Stadia Stats</h1>
+    <h1>Your StadiStats</h1>
     <div v-if="!imported">
       <UploadCard></UploadCard>
     </div>
@@ -16,7 +16,7 @@
       </v-flex>
     </v-layout>
     <v-dialog v-model="d_game_details" max-width="800">
-      <GameDetails :name.sync="selected_game_name"></GameDetails>
+      <GameDetails :name="selected_game_name"></GameDetails>
     </v-dialog>
   </div>
 </template>

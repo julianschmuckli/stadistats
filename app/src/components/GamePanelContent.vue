@@ -1,7 +1,10 @@
 <template>
   <div>
     <div v-html="game.skuDescription"></div>
-    <v-btn color="primary" @click="openStats" style="float:right;" text>Open stats</v-btn>
+    <v-btn color="primary" @click="openStats" style="float: right" text
+      ><v-icon style="margin-right: 5px">mdi-open-in-new</v-icon>Open
+      details</v-btn
+    >
   </div>
 </template>
 
@@ -11,18 +14,18 @@ export default {
   props: {
     game: {
       type: Object,
-      required: true
+      required: true,
     },
     index: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     openStats() {
       this.$emit("openStats", this.game);
-    }
-  } 
+    },
+  },
 };
 </script>
 

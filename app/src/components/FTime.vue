@@ -29,7 +29,7 @@ export default {
             }
             switch(this.timeDisplay) {
                 case "hours":
-                    return Math.floor((this.seconds / 60 / 60) * 10) / 10  + " hours";
+                    return Math.round((this.seconds / 60 / 60) * 10) / 10  + " hours";
                 case "minutes":
                     return Math.floor(this.seconds / 60) + " minutes";
                 case "seconds":
