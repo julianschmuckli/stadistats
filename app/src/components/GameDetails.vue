@@ -27,6 +27,7 @@
 
 <script>
 import gameState from "../store/game";
+import captureState from "../store/capture";
 import FTime from "./FTime.vue";
 import FDate from "./FDate.vue";
 import FGallery from "./FGallery.vue";
@@ -42,6 +43,8 @@ export default {
   data() {
     return {
       gameState: gameState,
+      captureState: captureState,
+
       currentState: {},
       images: [],
     };
@@ -55,8 +58,8 @@ export default {
           this.currentState = {};
         }
 
-        if (this.gameState.captures[this.name.toLowerCase()]) {
-          this.images = this.gameState.captures[this.name.toLowerCase()];
+        if (this.captureState.captures[this.name.toLowerCase()]) {
+          this.images = this.captureState.captures[this.name.toLowerCase()];
         } else {
           this.images = [];
         }

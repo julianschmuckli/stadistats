@@ -5,7 +5,6 @@ const gameState = Vue.observable(
             entitlements: undefined
         },
         game_history: undefined,
-        captures: undefined
     }
 );
 export default gameState;

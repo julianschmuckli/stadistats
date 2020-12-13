@@ -1,3 +1,4 @@
+import captureState from "../store/capture";
 import gameState from "../store/game";
 import userState from "../store/user";
 
@@ -109,7 +110,7 @@ var UploadManager = {
         });
     },
     finalizeImages() {
-        gameState.captures = imageData;
+        captureState.captures = imageData;
     },
     unzip: function(blob, updateProgress) {
         zip.createReader(
