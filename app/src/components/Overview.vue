@@ -11,6 +11,10 @@
           <b>Total played games:</b><br />
           {{ gamesPlayed }} titles
         </v-flex>
+        <v-flex xs12 sm6>
+          <b>Total screenshots:</b><br />
+          {{ totalScreenshots }} screenshots
+        </v-flex>
       </v-layout>
     </v-card-text>
   </v-card>
@@ -40,6 +44,14 @@ export default {
       var gameTitles = Object.keys(gameState.game_history);
       return gameTitles.length;
     },
+    totalScreenshots() {
+      var total = 0;
+      var gameTitles = Object.keys(gameState.captures);
+      gameTitles.forEach(function (gameTitle) {
+        total += gameState.captures[gameTitle].length;
+      });
+      return total;
+    }
   },
   components: { FTime },
 };

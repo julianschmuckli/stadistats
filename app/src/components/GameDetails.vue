@@ -19,8 +19,8 @@
           ></f-date>
         </v-flex>
       </v-layout>
-      <h3>Recent captures</h3>
-      <f-gallery :images="images"></f-gallery>
+      <!--<h3>Recent captures</h3>-->
+      <!--<f-gallery :images="images"></f-gallery>-->
     </v-card-text>
   </v-card>
 </template>
@@ -30,10 +30,10 @@ import gameState from "../store/game";
 import captureState from "../store/capture";
 import FTime from "./FTime.vue";
 import FDate from "./FDate.vue";
-import FGallery from "./FGallery.vue";
+//import FGallery from "./FGallery.vue";
 
 export default {
-  components: { FTime, FDate, FGallery },
+  components: { FTime, FDate, /*FGallery*/ },
   props: {
     name: {
       type: String,

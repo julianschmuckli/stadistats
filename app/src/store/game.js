@@ -2,9 +2,10 @@ import Vue from 'vue';
 const gameState = Vue.observable(
     {
         library: {
-            entitlements: undefined
+            entitlements: undefined // All the purchased / claimed titles
         },
-        game_history: undefined,
+        game_history: undefined, // Shows the history like play time, etc..
+        captures: [] //Counting all the screenshots
     }
 );
 export default gameState;

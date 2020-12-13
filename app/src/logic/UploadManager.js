@@ -27,6 +27,10 @@ var UploadManager = {
                     }.bind(this)
                 );
                 break;
+            /*
+            Stores the images / captures from the game additionaly. Due to performance issues, I had to cancel this.
+            I now just count the amount of images below.
+
             case "jpeg":
                 entry.getData(
                     new zip.BlobWriter(),
@@ -34,6 +38,19 @@ var UploadManager = {
                         await UploadManager.saveJPEG(fileName, content);
                     }.bind(this)
                 );
+                break;*/
+
+            case "jpeg":
+                var fileStructure = fileName.split("/");
+                if (fileStructure[0] === "user_captures") {
+                    var imageName = fileStructure[1].split("_capture")[0];
+                    if (!imageData[imageName]) {
+                        imageData[imageName] = [];
+                    }
+
+                    imageData[imageName].push(fileName);
+                }
+                gameState.captures = imageData;
                 break;
         }
     },
@@ -85,6 +102,7 @@ var UploadManager = {
                 break;
         }
     },
+    /** @deprecated */
     saveJPEG(fileName, content) {
         return new Promise(function(resolve) {
             var fileStructure = fileName.split("/");
@@ -109,6 +127,7 @@ var UploadManager = {
             }
         });
     },
+    /** @deprecated */
     finalizeImages() {
         captureState.captures = imageData;
     },

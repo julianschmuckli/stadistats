@@ -43,6 +43,11 @@ export default {
     },
     updateProgress(current, max) {
       this.progress = Math.round((current / max) * 100);
+      if (this.progress === 100) {
+        setTimeout(function() {
+          this.file = undefined; // Clear cache
+        }, 3000);
+      }
     },
   },
 };
