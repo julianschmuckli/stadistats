@@ -105,17 +105,20 @@ var UploadManager = {
     finalizeImages() {
         gameState.captures = imageData;
     },
-    unzip: function(blob) {
+    unzip: function(blob, updateProgress) {
         zip.createReader(
             new zip.BlobReader(blob),
             function(reader) {
                 reader.getEntries(
                     function(entries) {
-                        if (entries.length) {
+                        if (entries.length > 0) {
+                            var index = 0;
                             entries.forEach(
                                 function(entry) {
                                     UploadManager.processEntry(entry);
                                     UploadManager.finalizeImages();
+                                    index++;
+                                    updateProgress(index, entries.length);
                                 }.bind(this)
                             );
                             console.log(gameState);

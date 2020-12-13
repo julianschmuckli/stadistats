@@ -2,7 +2,7 @@
   <div class="home">
     <v-layout row wrap>
       <v-flex xs12 sm2>
-        <v-img src="/apple-icon.png" width="50" style="margin-left:auto;margin-right:auto;"></v-img>
+        <v-img src="/logo.svg" width="50" style="margin-left:auto;margin-right:auto;"></v-img>
       </v-flex>
       <v-flex xs12 sm10 style="text-align:center;">
         <h1>Your StadiStats</h1>
