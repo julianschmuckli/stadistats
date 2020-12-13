@@ -1,6 +1,13 @@
 <template>
   <div class="home">
-    <h1>Your StadiStats</h1>
+    <v-layout row wrap>
+      <v-flex xs12 sm2>
+        <v-img src="/apple-icon.png" width="50" style="margin-left:auto;margin-right:auto;"></v-img>
+      </v-flex>
+      <v-flex xs12 sm10 style="text-align:center;">
+        <h1>Your StadiStats</h1>
+      </v-flex>
+    </v-layout>
     <div v-if="!imported">
       <UploadCard></UploadCard>
     </div>
