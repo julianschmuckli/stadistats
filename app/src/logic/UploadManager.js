@@ -93,12 +93,18 @@ var UploadManager = {
                     imageData[imageName] = [];
                 }
 
-                var reader = new FileReader();
-                reader.readAsDataURL(content);
-                reader.onloadend = function() {
-                    imageData[imageName].push(reader.result);
+                if (imageData[imageName].length > 2) {
                     resolve(true);
-                };
+                } else {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(content);
+                    reader.onloadend = function() {
+                        if (imageData[imageName].length <= 2) {
+                            imageData[imageName].push(reader.result);
+                        }
+                        resolve(true);
+                    };
+                }
             }
         });
     },
