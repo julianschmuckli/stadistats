@@ -1,4 +1,6 @@
 # StadiStats
+![Logo](https://raw.githubusercontent.com/julianschmuckli/stadistats/master/app/public/apple-icon.png)
+
 This app visualizes the data from a Google Takeout export for Google Stadia.
 
 Have you ever wondered, how many hours you already spent on Google Stadia in total, or what is your average session time per game.
