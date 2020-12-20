@@ -9,11 +9,15 @@
         </v-flex>
         <v-flex xs12 sm6>
           <b>Total played games:</b><br />
-          {{ gamesPlayed }} titles
+          {{ gamesPlayed }} title(s)
         </v-flex>
         <v-flex xs12 sm6>
           <b>Total screenshots:</b><br />
-          {{ totalScreenshots }} screenshots
+          {{ totalScreenshots }} screenshot(s)
+        </v-flex>
+        <v-flex xs12 sm6>
+          <b>Total clips:</b><br />
+          {{ totalClips }} clip(s)
         </v-flex>
       </v-layout>
     </v-card-text>
@@ -44,11 +48,19 @@ export default {
       var gameTitles = Object.keys(gameState.game_history);
       return gameTitles.length;
     },
-    totalScreenshots() {
+    totalScreenshots() { // Captures
       var total = 0;
       var gameTitles = Object.keys(gameState.captures);
       gameTitles.forEach(function (gameTitle) {
         total += gameState.captures[gameTitle].length;
+      });
+      return total;
+    },
+    totalClips() { // Clips
+      var total = 0;
+      var gameTitles = Object.keys(gameState.clips);
+      gameTitles.forEach(function (gameTitle) {
+        total += gameState.clips[gameTitle].length;
       });
       return total;
     }

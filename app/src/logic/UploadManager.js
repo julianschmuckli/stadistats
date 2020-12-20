@@ -5,7 +5,8 @@ import userState from "../store/user";
 var zip = require("zip-js/WebContent/zip.js").zip;
 zip.useWebWorkers = true;
 
-var imageData = {};
+var imageData = {}; // For screenshots
+var clipsData = {}; // For clips
 
 var UploadManager = {
     processEntry(entry) {
@@ -19,7 +20,7 @@ var UploadManager = {
             fileNameParts[fileNameParts.length - 1].replace("." + fileType, "")
         ).toLowerCase();
         switch (fileType) {
-            case "json":
+            case "json": // Normal data
                 entry.getData(
                     new zip.TextWriter(),
                     function(content) {
@@ -40,7 +41,7 @@ var UploadManager = {
                 );
                 break;*/
 
-            case "jpeg":
+            case "jpeg": // Captures
                 var fileStructure = fileName.split("/");
                 if (fileStructure[0] === "user_captures") {
                     var imageName = fileStructure[1].split("_capture")[0];
@@ -51,6 +52,18 @@ var UploadManager = {
                     imageData[imageName].push(fileName);
                 }
                 gameState.captures = imageData;
+                break;
+            case "webm": // Clips
+                var fileStructure2 = fileName.split("/");
+                if (fileStructure2[0] === "user_captures") {
+                    var clipName = fileStructure2[1].split("_capture")[0];
+                    if (!clipsData[clipName]) {
+                        clipsData[clipName] = [];
+                    }
+
+                    clipsData[clipName].push(fileName);
+                }
+                gameState.clips = clipsData;
                 break;
         }
     },
