@@ -9,6 +9,7 @@ var imageData = {}; // For screenshots
 var clipsData = {}; // For clips
 
 var gameStats = {}; // For user game stats
+var gameAchievements = {}; // For user game achievements
 
 var UploadManager = {
     processEntry(entry) {
@@ -121,15 +122,22 @@ var UploadManager = {
                 break;
         }
     },
-    processJSON: function (filePath, content) {
+    processJSON: function(filePath, content) {
         var fileParts = filePath.split("/");
-        var game_title = fileParts[fileParts.length - 1].replace(".json", "").toLowerCase();
+        var game_title = fileParts[fileParts.length - 1]
+            .replace(".json", "")
+            .toLowerCase();
         var contentType = fileParts[fileParts.length - 2].toLowerCase(); // ex. user_gamer_stats
+
+        var json = JSON.parse(content);
         switch (contentType) {
             case "user_gamer_stats":
-                var json = JSON.parse(content);
                 gameStats[game_title] = json;
                 gameState.game_stats = gameStats;
+                break;
+            case "user_achievements":
+                gameAchievements[game_title] = json;
+                gameState.game_achievements = gameAchievements;
                 break;
         }
     },

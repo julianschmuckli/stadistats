@@ -5,8 +5,7 @@
       <h3>Times</h3>
       <v-layout row wrap>
         <v-flex sm6 xs12 md4>
-          <b>Total</b
-          ><f-time :seconds="currentState.totalTimePlayed"></f-time>
+          <b>Total</b><f-time :seconds="currentState.totalTimePlayed"></f-time>
         </v-flex>
         <v-flex sm6 xs12 md4>
           <b>Per session</b
@@ -23,8 +22,29 @@
       <h3 v-if="game_stats.length >= 1">Game stats</h3>
       <v-layout row wrap>
         <v-flex lg3 md4 sm6 xs12 v-for="stat in game_stats" :key="stat.name">
-          <p><b>{{ stat.name }}</b></p>
+          <p>
+            <b>{{ stat.name }}</b>
+          </p>
           <p>{{ stat.value }}</p>
+        </v-flex>
+      </v-layout>
+      <h3 v-if="game_achievements.length >= 1">Achievements</h3>
+      <v-layout row wrap>
+        <v-flex
+          lg6
+          md6
+          sm12
+          xs12
+          v-for="achievement in game_achievements"
+          :key="achievement.name"
+          :class="{ completed: achievement.progress === '100%', achievement: true }"
+        >
+          <p>
+            <b>{{ achievement.achievementName }} ({{ achievement.progress }})</b>
+          </p>
+          <p>{{ achievement.description }}</p>
+          <dd v-if="achievement.progress === '100%'">Completed on <f-date style="display:inline;" :date="new Date(achievement.completionTime)"></f-date></dd>
+          <dd v-else>Not completed yet</dd>
         </v-flex>
       </v-layout>
       <!--<h3>Recent captures</h3>-->
@@ -55,31 +75,48 @@ export default {
 
       currentState: {},
       images: [],
-      game_stats: []
+      game_stats: [],
+      game_achievements: [],
     };
   },
   methods: {
     setContext() {
       if (this.name !== undefined) {
+        // Game history / times
         if (this.gameState.game_history[this.name]) {
           this.currentState = this.gameState.game_history[this.name];
         } else {
           this.currentState = {};
         }
 
+        // Captures
         if (this.captureState.captures[this.name.toLowerCase()]) {
           this.images = this.captureState.captures[this.name.toLowerCase()];
         } else {
           this.images = [];
         }
 
+        // Game stats
         if (this.gameState.game_stats[this.name.toLowerCase()]) {
-          this.game_stats = this.gameState.game_stats[this.name.toLowerCase()].inApplicationGamerStats.item;
+          this.game_stats = this.gameState.game_stats[
+            this.name.toLowerCase()
+          ].inApplicationGamerStats.item;
         } else {
           this.game_stats = [];
         }
+
+        // Game achievements
+        if (this.gameState.game_achievements[this.name.toLowerCase()]) {
+          this.game_achievements = this.gameState.game_achievements[
+            this.name.toLowerCase()
+          ].inApplicationAchievements.item.filter((item) => {
+            return item.achievementName !== undefined;
+          });
+        } else {
+          this.game_achievements = [];
+        }
       }
-    },
+    }
   },
   mounted() {
     this.setContext();
@@ -95,6 +132,16 @@ export default {
 <style>
 h3 {
   margin-left: -5px;
-  color:black;
+  color: black;
+}
+
+.achievement.completed {
+  color: rgb(1, 185, 1);
+}
+.achievement {
+  color: rgb(182, 182, 182);
+}
+dd {
+  font-size: 10px;
 }
 </style>

@@ -6,7 +6,10 @@ const gameState = Vue.observable(
         },
         game_history: undefined, // Shows the history like play time, etc..
         captures: [], // Counting all the screenshots
-        clips: [] // Counting all the clips
+        clips: [], // Counting all the clips
+
+        game_stats: {}, // Detailed game stats
+        game_achievements: {} // Detailed achievements
     }
 );
 export default gameState;

@@ -22,7 +22,7 @@
         <Games @expandedGame="prepareGameDetails" @openGameDetails="d_game_details = true"></Games>
       </v-flex>
     </v-layout>
-    <v-dialog v-model="d_game_details" max-width="800">
+    <v-dialog v-model="d_game_details" max-width="800px" style="height:70vh">
       <GameDetails :name="selected_game_name"></GameDetails>
     </v-dialog>
   </div>
@@ -73,5 +73,8 @@ h1 {
 }
 .flex {
   padding: 10px;
+}
+.v-dialog {
+  max-height: 70vh !important;
 }
 </style>
