@@ -2,21 +2,29 @@
   <v-card>
     <v-card-title>{{ name }}</v-card-title>
     <v-card-text>
+      <h3>Times</h3>
       <v-layout row wrap>
         <v-flex sm6 xs12 md4>
-          <b>Total: </b
+          <b>Total</b
           ><f-time :seconds="currentState.totalTimePlayed"></f-time>
         </v-flex>
         <v-flex sm6 xs12 md4>
-          <b>Per session: </b
+          <b>Per session</b
           ><f-time :seconds="currentState.averageTimePlayedPerSession"></f-time>
         </v-flex>
         <v-flex sm6 xs12 md4>
-          <b>Last time played: </b
+          <b>Last time played</b
           ><f-date
             :date="currentState.mostRecentPlayTime"
             :withTime="true"
           ></f-date>
+        </v-flex>
+      </v-layout>
+      <h3 v-if="game_stats.length >= 1">Game stats</h3>
+      <v-layout row wrap>
+        <v-flex lg3 md4 sm6 xs12 v-for="stat in game_stats" :key="stat.name">
+          <p><b>{{ stat.name }}</b></p>
+          <p>{{ stat.value }}</p>
         </v-flex>
       </v-layout>
       <!--<h3>Recent captures</h3>-->
@@ -33,7 +41,7 @@ import FDate from "./FDate.vue";
 //import FGallery from "./FGallery.vue";
 
 export default {
-  components: { FTime, FDate, /*FGallery*/ },
+  components: { FTime, FDate /*FGallery*/ },
   props: {
     name: {
       type: String,
@@ -47,6 +55,7 @@ export default {
 
       currentState: {},
       images: [],
+      game_stats: []
     };
   },
   methods: {
@@ -63,6 +72,12 @@ export default {
         } else {
           this.images = [];
         }
+
+        if (this.gameState.game_stats[this.name.toLowerCase()]) {
+          this.game_stats = this.gameState.game_stats[this.name.toLowerCase()].inApplicationGamerStats.item;
+        } else {
+          this.game_stats = [];
+        }
       }
     },
   },
@@ -78,4 +93,8 @@ export default {
 </script>
 
 <style>
+h3 {
+  margin-left: -5px;
+  color:black;
+}
 </style>

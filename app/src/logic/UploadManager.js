@@ -8,6 +8,8 @@ zip.useWebWorkers = true;
 var imageData = {}; // For screenshots
 var clipsData = {}; // For clips
 
+var gameStats = {}; // For user game stats
+
 var UploadManager = {
     processEntry(entry) {
         var fileType = entry.filename.split(".")[
@@ -121,11 +123,13 @@ var UploadManager = {
     },
     processJSON: function (filePath, content) {
         var fileParts = filePath.split("/");
+        var game_title = fileParts[fileParts.length - 1].replace(".json", "").toLowerCase();
         var contentType = fileParts[fileParts.length - 2].toLowerCase(); // ex. user_gamer_stats
         switch (contentType) {
             case "user_gamer_stats":
                 var json = JSON.parse(content);
-                json;
+                gameStats[game_title] = json;
+                gameState.game_stats = gameStats;
                 break;
         }
     },
