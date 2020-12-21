@@ -24,7 +24,8 @@ var UploadManager = {
                 entry.getData(
                     new zip.TextWriter(),
                     function(content) {
-                        UploadManager.saveJSON(fileName, content);
+                        UploadManager.saveJSON(fileName, content); // Saves specific files like library.json, user_profile.json.
+                        UploadManager.processJSON(entry.filename, content); // Processes and saves files, which are saved for every game.
                     }.bind(this)
                 );
                 break;
@@ -112,6 +113,19 @@ var UploadManager = {
                     };
                 });
                 gameState.game_history = history;
+                break;
+            default:
+                // Ignore the file
+                break;
+        }
+    },
+    processJSON: function (filePath, content) {
+        var fileParts = filePath.split("/");
+        var contentType = fileParts[fileParts.length - 2].toLowerCase(); // ex. user_gamer_stats
+        switch (contentType) {
+            case "user_gamer_stats":
+                var json = JSON.parse(content);
+                json;
                 break;
         }
     },
