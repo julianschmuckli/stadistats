@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div v-html="game.skuDescription"></div>
     <v-btn color="primary" @click="openStats" style="float: right" text
       ><v-icon style="margin-right: 5px">mdi-open-in-new</v-icon>Open
       details</v-btn
@@ -25,7 +24,7 @@ export default {
     openStats() {
       this.$emit("openStats", this.game);
     },
-  },
+  }
 };
 </script>
 

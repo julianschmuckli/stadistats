@@ -11,8 +11,8 @@
         @change="selected"
       ></v-file-input>
       <div style="text-align: center;" v-else>
-        <v-progress-circular color="#D72D2D" :value="progress"></v-progress-circular>
-        <p>{{ progress }} %</p>
+        <v-progress-circular color="#D72D2D" indeterminate></v-progress-circular>
+        <p>Preparing...</p>
       </div>
     </v-card-text>
   </v-card>

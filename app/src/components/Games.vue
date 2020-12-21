@@ -1,20 +1,18 @@
 <template>
   <v-card>
-    <v-card-title>Your games ({{ countGames }})</v-card-title>
+    <v-card-title style="margin:0;padding-bottom:0;">Your games ({{ countGames }})</v-card-title>
     <v-card-text>
-      <v-expansion-panels flat hover v-model="expandedGame">
-        <v-expansion-panel
-          v-for="(game, index) in gameState.library.entitlements"
+      <v-text-field placeholder="Search your games..." v-model="game_query" style="margin:0 10px 0 10px;"></v-text-field>
+      <v-list v-model="expandedGame">
+        <v-list-item ripple style="cursor:pointer;"
+          v-for="(game, index) in games"
           :key="game.skuName"
         >
-          <v-expansion-panel-header
+          <v-list-item-title @click="() => { selectGame(index); openStats() }"
             >{{ game.skuName }}
-          </v-expansion-panel-header>
-          <v-expansion-panel-content
-            ><game-panel-content :game="game" :index="index" @openStats="openStats"></game-panel-content>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
     </v-card-text>
   </v-card>
 </template>
@@ -22,13 +20,13 @@
 <script>
 import gameState from "../store/game";
 
-import GamePanelContent from './GamePanelContent';
-
 export default {
   data() {
     return {
       gameState: gameState,
       expandedGame: undefined,
+
+      game_query: ""
     };
   },
   computed: {
@@ -39,19 +37,31 @@ export default {
         return 0;
       }
     },
+    games() {
+      if (gameState.library.entitlements !== undefined) {
+        var games = gameState.library.entitlements.filter((item) => {
+          if (this.game_query === "") {
+            return true;
+          } else if (item["skuName"].toLowerCase().includes(this.game_query.toLowerCase())) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        
+        return games.slice(0, 5);
+      } else {
+        return [];
+      }
+    }
   },
   methods: {
     openStats(game) {
       this.$emit("openGameDetails", game);
-    }
-  },
-  watch: {
-    expandedGame(index) {
+    },
+    selectGame(index) {
       this.$emit("expandedGame", gameState.library.entitlements[index]);
     }
-  },
-  components: {
-    GamePanelContent
   }
 };
 </script>
