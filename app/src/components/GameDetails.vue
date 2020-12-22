@@ -37,13 +37,24 @@
           xs12
           v-for="achievement in game_achievements"
           :key="achievement.name"
-          :class="{ completed: achievement.progress === '100%', achievement: true }"
+          :class="{
+            completed: achievement.progress === '100%',
+            achievement: true,
+          }"
         >
           <p>
-            <b>{{ achievement.achievementName }} ({{ achievement.progress }})</b>
+            <b
+              >{{ achievement.achievementName }} ({{ achievement.progress }})</b
+            >
           </p>
           <p>{{ achievement.description }}</p>
-          <dd v-if="achievement.progress === '100%'">Completed on <f-date style="display:inline;" :date="new Date(achievement.completionTime)"></f-date></dd>
+          <dd v-if="achievement.progress === '100%'">
+            Completed on
+            <f-date
+              style="display: inline"
+              :date="new Date(achievement.completionTime)"
+            ></f-date>
+          </dd>
           <dd v-else>Not completed yet</dd>
         </v-flex>
       </v-layout>
@@ -80,6 +91,12 @@ export default {
     };
   },
   methods: {
+    resetContext() {
+      this.currentState = {};
+      this.images = [];
+      this.game_stats = [];
+      this.game_achievements = [];
+    },
     setContext() {
       if (this.name !== undefined) {
         // Game history / times
@@ -109,16 +126,27 @@ export default {
         if (this.gameState.game_achievements[this.name.toLowerCase()]) {
           this.game_achievements = this.gameState.game_achievements[
             this.name.toLowerCase()
-          ].inApplicationAchievements.item.filter((item) => {
-            return item.achievementName !== undefined;
-          });
+          ].inApplicationAchievements.item
+            .filter((item) => {
+              return item.achievementName !== undefined;
+            })
+            .sort((a, b) => {
+              var progress_a = parseInt(a.progress.replace("%", ""));
+              var progress_b = parseInt(b.progress.replace("%", ""));
+              if (progress_a < progress_b) {
+                return 1;
+              } else {
+                return -1;
+              }
+            });
         } else {
           this.game_achievements = [];
         }
       }
-    }
+    },
   },
   mounted() {
+    this.resetContext();
     this.setContext();
   },
   watch: {

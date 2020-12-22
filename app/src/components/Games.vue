@@ -49,7 +49,7 @@ export default {
           }
         });
         
-        return games.slice(0, 5);
+        return games.slice(0, 10);
       } else {
         return [];
       }
